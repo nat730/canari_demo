@@ -8,18 +8,7 @@ type Card = {
 
 const CardFlipPage: React.FC = () => {
   const [flippedStates, setFlippedStates] = useState<boolean[]>([false, false, false]);
-
-  const toggleCard = (index: number): void => {
-    setFlippedStates((prev) =>
-      prev.map((state, i) => (i === index ? !state : state))
-    );
-  };
-
-  const handleValidate = (): void => {
-    setFlippedStates((prev) => prev.map((state) => !state));
-  };
-
-  const cards: Card[] = [
+  const [cards, setCards] = useState<Card[]>([
     {
       video: "/video/video1.mp4",
       image: "/image/image1.jpg",
@@ -32,16 +21,40 @@ const CardFlipPage: React.FC = () => {
       video: "/video/video3.mp4",
       image: "/image/image3.jpg",
     },
-  ];
+  ]);
+  const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
+
+  const handleValidate = (): void => {
+    // Retourner toutes les cartes lors du clic sur "Valider"
+    setFlippedStates((prev) => prev.map((state) => !state));
+  };
+
+  const handleCardClick = (index: number) => {
+    if (selectedCardIndex === null) {
+      // Sélectionner la première carte
+      setSelectedCardIndex(index);
+    } else {
+      // Échanger les deux cartes
+      const newCards = [...cards];
+      [newCards[selectedCardIndex], newCards[index]] = [
+        newCards[index],
+        newCards[selectedCardIndex],
+      ];
+      setCards(newCards);
+      setSelectedCardIndex(null); // Réinitialisation de la sélection
+    }
+  };
 
   return (
     <div className="page-container">
       <div className="card-container">
         {cards.map((card, index) => (
           <div
-            className={`card ${flippedStates[index] ? "flipped" : ""}`}
+            className={`card ${flippedStates[index] ? "flipped" : ""} ${
+              selectedCardIndex === index ? "selected" : ""
+            }`}
             key={index}
-            onClick={() => toggleCard(index)}
+            onClick={() => handleCardClick(index)}
           >
             <div className="card-front">
               <img

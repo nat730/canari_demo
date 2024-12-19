@@ -18,8 +18,8 @@
   
   /* Style de base pour chaque carte */
   .card {
-    width: 200px;
-    height: 300px;
+    width: 400px;
+    height: 600px;
     position: relative;
     transform-style: preserve-3d; /* Active la transformation 3D */
     transition: transform 0.6s;
@@ -73,8 +73,8 @@
   /* Bouton de validation */
   .validate-button {
     margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 30px 150px;
+    font-size: 30px;
     color: #fff;
     background-color: #007bff;
     border: none;
@@ -87,3 +87,10 @@
     background-color: #0056b3;
   }
   
+  .card.selected {
+    outline: 5px solid #5baaa6;
+    outline-offset: 5px; 
+    transform: scale(1.05);
+    z-index: 10;
+    transition: outline 0.3s ease, transform 0.3s ease;
+  }
