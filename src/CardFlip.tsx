@@ -1,31 +1,36 @@
 import React, { useState } from "react";
-import "./CardFlip.css"; // Importation des styles
+import "./CardFlip.css";
 
-// Type pour les cartes
 type Card = {
   video: string;
   image: string;
 };
 
 const CardFlipPage: React.FC = () => {
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [flippedStates, setFlippedStates] = useState<boolean[]>([false, false, false]);
+
+  const toggleCard = (index: number): void => {
+    setFlippedStates((prev) =>
+      prev.map((state, i) => (i === index ? !state : state))
+    );
+  };
 
   const handleValidate = (): void => {
-    setIsFlipped(true);
+    setFlippedStates((prev) => prev.map((state) => !state));
   };
 
   const cards: Card[] = [
     {
-      video: "/video1.mp4", // Assurez-vous que les vidéos sont dans /public
-      image: "/image1.jpg", // Idem pour les images
+      video: "/video/video1.mp4",
+      image: "/image/image1.jpg",
     },
     {
-      video: "/video2.mp4",
-      image: "/image2.jpg",
+      video: "/video/video2.mp4",
+      image: "/image/image2.jpg",
     },
     {
-      video: "/video3.mp4",
-      image: "/image3.jpg",
+      video: "/video/video3.mp4",
+      image: "/image/image3.jpg",
     },
   ];
 
@@ -33,21 +38,25 @@ const CardFlipPage: React.FC = () => {
     <div className="page-container">
       <div className="card-container">
         {cards.map((card, index) => (
-          <div className={`card ${isFlipped ? "flipped" : ""}`} key={index}>
+          <div
+            className={`card ${flippedStates[index] ? "flipped" : ""}`}
+            key={index}
+            onClick={() => toggleCard(index)}
+          >
             <div className="card-front">
+              <img
+                src={card.image}
+                alt={`Card ${index + 1}`}
+                className="card-image"
+              />
+            </div>
+            <div className="card-back">
               <video
                 src={card.video}
                 autoPlay
                 loop
                 muted
                 className="card-video"
-              />
-            </div>
-            <div className="card-back">
-              <img
-                src={card.image}
-                alt={`Card ${index + 1}`}
-                className="card-image"
               />
             </div>
           </div>
